@@ -1,138 +1,202 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listening and Writing</title>
-    <style>
-        :root {
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --hover: #f1f5f9;
-            --text: #0f172a;
-            --sub: #64748b;
-            --accent: #2563eb;
-            --border: #e2e8f0;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            padding: 2.5rem 1rem;
-            line-height: 1.5;
-        }
-        .container { max-width: 920px; margin: 0 auto; }
-        header { text-align: center; margin-bottom: 2rem; }
-        header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem; }
-        header p { color: var(--sub); font-size: 0.95rem; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listening and Writing</title>
+  <style>
+    :root {
+      --c-dark: #0E4D54;   /* Màu 1: xanh ngọc đậm */
+      --c-main: #2A9D8F;   /* Màu 2: xanh ngọc chủ đạo */
+      --c-light: #E8F6F4;  /* Màu 3: xanh ngọc nhạt (nền) */
+      --text: #1F3A3D;
+      --white: #FFFFFF;
+    }
 
-        .toolbar { display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .search {
-            flex: 1; min-width: 240px; padding: 0.75rem 1rem;
-            border: 1px solid var(--border); border-radius: 10px;
-            font-size: 0.95rem; background: var(--card); outline: none;
-        }
-        .search:focus { border-color: var(--accent); }
-        .badge {
-            background: var(--card); border: 1px solid var(--border);
-            padding: 0.75rem 1.1rem; border-radius: 10px;
-            font-size: 0.875rem; font-weight: 600; color: var(--sub);
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .card {
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: 12px; overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .list { list-style: none; }
-        .item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0.95rem 1.25rem; border-bottom: 1px solid var(--border); gap: 1rem;
-        }
-        .item:last-child { border-bottom: none; }
-        .item:hover { background: var(--hover); }
-        .info { display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1; }
-        .name {
-            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-            font-size: 0.9rem; color: var(--text); text-decoration: none;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .name:hover { color: var(--accent); text-decoration: underline; }
-        .actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
-        .btn {
-            padding: 0.4rem 0.85rem; border-radius: 6px; font-size: 0.82rem;
-            font-weight: 500; cursor: pointer; text-decoration: none;
-            border: 1px solid #bfdbfe; background: #eff6ff; color: var(--accent);
-        }
-        .btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-        .btn-gh {
-            border-color: var(--border); background: #fff; color: var(--text);
-        }
-        .btn-gh:hover { background: #334155; color: #fff; border-color: #334155; }
-        .empty { padding: 3rem 1rem; text-align: center; color: var(--sub); }
-    </style>
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+      background: var(--c-light);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--c-dark), var(--c-main));
+      color: var(--white);
+      text-align: center;
+      padding: 64px 20px 80px;
+    }
+    header h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    header p {
+      margin-top: 10px;
+      opacity: 0.9;
+      font-size: 1.05rem;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1100px;
+      margin: -40px auto 0;
+      padding: 0 20px 60px;
+      flex: 1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      border-top: 4px solid var(--c-main);
+      box-shadow: 0 4px 14px rgba(14, 77, 84, 0.08);
+      padding: 24px;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(14, 77, 84, 0.18);
+    }
+
+    .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--c-light);
+      color: var(--c-dark);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .card h2 {
+      font-size: 1.1rem;
+      color: var(--c-dark);
+      font-weight: 600;
+    }
+    .card .action {
+      margin-top: auto;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--c-main);
+    }
+
+    .card.wide {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--c-dark);
+      border-top: none;
+    }
+    .card.wide h2 { color: var(--white); }
+    .card.wide .action { color: var(--c-light); margin-top: 0; }
+    .card.wide:hover { box-shadow: 0 12px 24px rgba(14, 77, 84, 0.35); }
+
+    footer {
+      text-align: center;
+      color: var(--c-dark);
+      font-size: 0.9rem;
+      opacity: 0.8;
+      padding-bottom: 30px;
+    }
+
+    a:focus-visible {
+      outline: 3px solid var(--c-main);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card { transition: none; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Listening and Writing</h1>
-        <p>Danh sách toàn bộ tài liệu và bài học</p>
-    </header>
+  <header>
+    <h1>Listening and Writing</h1>
+    <p>Chọn một bài học để bắt đầu</p>
+  </header>
 
-    <div class="toolbar">
-        <input type="text" class="search" id="search" placeholder="Tìm kiếm tên bài học hoặc file..." oninput="render()">
-        <div class="badge" id="count">0 tệp</div>
+  <main>
+    <div class="grid">
+
+      <a class="card" href="Unit%201%20-%20Your%20Skin%20and%20Hair.html">
+        <div class="num">01</div>
+        <h2>Your Skin and Hair</h2>
+        <span class="action">Mở bài học →</span>
+      </a>
+
+      <a class="card" href="Unit%202%20-%20Your%20Bones.html">
+        <div class="num">02</div>
+        <h2>Your Bones</h2>
+        <span class="action">Mở bài học →</span>
+      </a>
+
+      <a class="card" href="Unit%203%20-%20Your%20Muscles.html">
+        <div class="num">03</div>
+        <h2>Your Muscles</h2>
+        <span class="action">Mở bài học →</span>
+      </a>
+
+      <a class="card" href="Unit%204%20-%20Your%20Eyes%20and%20Ears.html">
+        <div class="num">04</div>
+        <h2>Your Eyes and Ears</h2>
+        <span class="action">Mở bài học →</span>
+      </a>
+
+      <a class="card" href="Unit%205%20-%20Your%20Nose%20and%20Mouth.html">
+        <div class="num">05</div>
+        <h2>Your Nose and Mouth</h2>
+        <span class="action">Mở bài học →</span>
+      </a>
+
+      <a class="card" href="Unit%206%20-%20Your%20Brain.html">
+        <div class="num">06</div>
+        <h2>Your Brain</h2>
+        <span class="action">Mở bài học →</span>
+      </a>
+
+      <a class="card" href="Unit%207%20-%20Getting%20Sick.html">
+        <div class="num">07</div>
+        <h2>Getting Sick</h2>
+        <span class="action">Mở bài học →</span>
+      </a>
+
+      <a class="card" href="Unit%208%20-%20Protect%20Your%20Body.html">
+        <div class="num">08</div>
+        <h2>Protect Your Body</h2>
+        <span class="action">Mở bài học →</span>
+      </a>
+
+      <a class="card wide" href="README.md">
+        <h2>Đọc README</h2>
+        <span class="action">Xem thông tin dự án →</span>
+      </a>
+
     </div>
+  </main>
 
-    <div class="card">
-        <ul class="list" id="list"></ul>
-    </div>
-</div>
+  <footer>
+    &copy; Listening and Writing
+  </footer>
 
-<script>
-    // Danh sách tệp trong kho lưu trữ lehanh2882-liy/listening-and-writing
-    // Khi thêm file mới lên GitHub, bạn chỉ cần thêm tên file vào danh sách dưới đây:
-    const FILES = [
-        "README.md",
-        "listening.html",
-        "writing.html"
-    ];
-
-    const USER = "lehanh2882-liy";
-    const REPO = "listening-and-writing";
-
-    function render() {
-        const q = document.getElementById('search').value.toLowerCase().trim();
-        const filtered = FILES.filter(f => f.toLowerCase().includes(q));
-        document.getElementById('count').textContent = `${filtered.length} tệp`;
-
-        if (!filtered.length) {
-            document.getElementById('list').innerHTML = '<li class="empty">Không tìm thấy tệp phù hợp.</li>';
-            return;
-        }
-
-        document.getElementById('list').innerHTML = filtered.map(path => {
-            const isHtml = path.toLowerCase().endsWith('.html');
-            const pageUrl = `./${path}`;
-            const githubUrl = `https://github.com{USER}/${REPO}/blob/main/${path}`;
-            return `
-                <li class="item">
-                    <div class="info">
-                        <span>${isHtml ? '🌐' : '📄'}</span>
-                        <a href="${isHtml ? pageUrl : githubUrl}" target="_blank" class="name">${path}</a>
-                    </div>
-                    <div class="actions">
-                        ${isHtml ? `<a href="${pageUrl}" target="_blank" class="btn">Mở bài</a>` : ''}
-                        <a href="${githubUrl}" target="_blank" class="btn btn-gh">GitHub</a>
-                    </div>
-                </li>
-            `;
-        }).join('');
-    }
-
-    render();
-</script>
 </body>
 </html>
