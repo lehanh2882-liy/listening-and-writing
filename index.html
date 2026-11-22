@@ -1,202 +1,222 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Listening and Writing</title>
-  <style>
-    :root {
-      --c-dark: #0E4D54;   /* Màu 1: xanh ngọc đậm */
-      --c-main: #2A9D8F;   /* Màu 2: xanh ngọc chủ đạo */
-      --c-light: #E8F6F4;  /* Màu 3: xanh ngọc nhạt (nền) */
-      --text: #1F3A3D;
-      --white: #FFFFFF;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listening Writing Speaking</title>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-light: #ccfbf1;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
-      background: var(--c-light);
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
 
-    header {
-      background: linear-gradient(135deg, var(--c-dark), var(--c-main));
-      color: var(--white);
-      text-align: center;
-      padding: 64px 20px 80px;
-    }
-    header h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-    header p {
-      margin-top: 10px;
-      opacity: 0.9;
-      font-size: 1.05rem;
-    }
+        .container { max-width: 900px; margin: 0 auto; }
 
-    main {
-      width: 100%;
-      max-width: 1100px;
-      margin: -40px auto 0;
-      padding: 0 20px 60px;
-      flex: 1;
-    }
+        header { text-align: center; margin-bottom: 2rem; }
+        header h1 { font-size: 2.25rem; color: var(--primary); margin-bottom: 0.5rem; }
+        header p { color: var(--text-muted); font-size: 1.1rem; }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 20px;
-    }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
 
-    .card {
-      background: var(--white);
-      border-radius: 16px;
-      border-top: 4px solid var(--c-main);
-      box-shadow: 0 4px 14px rgba(14, 77, 84, 0.08);
-      padding: 24px;
-      color: var(--text);
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(14, 77, 84, 0.18);
-    }
+        .search-box { width: 100%; max-width: 450px; }
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: 9999px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .search-box input:focus { border-color: var(--primary); }
 
-    .num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: var(--c-light);
-      color: var(--c-dark);
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-    .card h2 {
-      font-size: 1.1rem;
-      color: var(--c-dark);
-      font-weight: 600;
-    }
-    .card .action {
-      margin-top: auto;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--c-main);
-    }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.25rem;
+        }
 
-    .card.wide {
-      grid-column: 1 / -1;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--c-dark);
-      border-top: none;
-    }
-    .card.wide h2 { color: var(--white); }
-    .card.wide .action { color: var(--c-light); margin-top: 0; }
-    .card.wide:hover { box-shadow: 0 12px 24px rgba(14, 77, 84, 0.35); }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
 
-    footer {
-      text-align: center;
-      color: var(--c-dark);
-      font-size: 0.9rem;
-      opacity: 0.8;
-      padding-bottom: 30px;
-    }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
+        }
 
-    a:focus-visible {
-      outline: 3px solid var(--c-main);
-      outline-offset: 3px;
-    }
+        .badge {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            margin-bottom: 0.75rem;
+            width: fit-content;
+            text-transform: uppercase;
+        }
 
-    @media (prefers-reduced-motion: reduce) {
-      .card { transition: none; }
-    }
-  </style>
+        .card h2 {
+            font-size: 1.35rem;
+            color: var(--text-main);
+            text-transform: capitalize;
+        }
+
+        .btn-link {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 1.25rem;
+            display: inline-block;
+        }
+
+        .status-msg { text-align: center; color: var(--text-muted); grid-column: 1 / -1; padding: 2rem; }
+        footer { text-align: center; margin-top: 4rem; color: var(--text-muted); font-size: 0.875rem; }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Oxford units</h1>
+            <p>Hệ thống bài bổ trợ</p>
+        </header>
 
-  <header>
-    <h1>Listening and Writing</h1>
-    <p>Chọn một bài học để bắt đầu</p>
-  </header>
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Tìm nhanh bài học (ví dụ: unit 05, unit 12)...">
+            </div>
+        </div>
 
-  <main>
-    <div class="grid">
+        <main class="grid" id="fileList">
+            <p class="status-msg">Đang tải danh sách bài học...</p>
+        </main>
 
-      <a class="card" href="Unit%201%20-%20Your%20Skin%20and%20Hair.html">
-        <div class="num">01</div>
-        <h2>Your Skin and Hair</h2>
-        <span class="action">Mở bài học →</span>
-      </a>
-
-      <a class="card" href="Unit%202%20-%20Your%20Bones.html">
-        <div class="num">02</div>
-        <h2>Your Bones</h2>
-        <span class="action">Mở bài học →</span>
-      </a>
-
-      <a class="card" href="Unit%203%20-%20Your%20Muscles.html">
-        <div class="num">03</div>
-        <h2>Your Muscles</h2>
-        <span class="action">Mở bài học →</span>
-      </a>
-
-      <a class="card" href="Unit%204%20-%20Your%20Eyes%20and%20Ears.html">
-        <div class="num">04</div>
-        <h2>Your Eyes and Ears</h2>
-        <span class="action">Mở bài học →</span>
-      </a>
-
-      <a class="card" href="Unit%205%20-%20Your%20Nose%20and%20Mouth.html">
-        <div class="num">05</div>
-        <h2>Your Nose and Mouth</h2>
-        <span class="action">Mở bài học →</span>
-      </a>
-
-      <a class="card" href="Unit%206%20-%20Your%20Brain.html">
-        <div class="num">06</div>
-        <h2>Your Brain</h2>
-        <span class="action">Mở bài học →</span>
-      </a>
-
-      <a class="card" href="Unit%207%20-%20Getting%20Sick.html">
-        <div class="num">07</div>
-        <h2>Getting Sick</h2>
-        <span class="action">Mở bài học →</span>
-      </a>
-
-      <a class="card" href="Unit%208%20-%20Protect%20Your%20Body.html">
-        <div class="num">08</div>
-        <h2>Protect Your Body</h2>
-        <span class="action">Mở bài học →</span>
-      </a>
-
-      <a class="card wide" href="README.md">
-        <h2>Đọc README</h2>
-        <span class="action">Xem thông tin dự án →</span>
-      </a>
-
+        <footer>
+            <p>&copy; 2026 Grammar Repository - Tự động đồng bộ từ GitHub</p>
+        </footer>
     </div>
-  </main>
 
-  <footer>
-    &copy; Listening and Writing
-  </footer>
+    <script>
+        const USERNAME = 'lehanh2882-liy';
+        const REPO = 'listening-and-writing';
+        const BRANCH = 'main';
 
+        // Danh sách dự phòng từ unit01 đến unit15
+        const FALLBACK_FILES = Array.from({ length: 15 }, (_, i) => {
+            const num = String(i + 1).padStart(2, '0');
+            return { name: `unit${num}.html` };
+        });
+
+        let allLessons = [];
+
+        // Định dạng "unit01.html" -> "Unit 01"
+        function formatTitle(filename) {
+            return filename
+                .replace(/\.html$/i, '')
+                .replace(/([a-zA-Z])(\d)/g, '$1 $2') // Thêm khoảng trắng giữa chữ và số
+                .replace(/[-_]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function renderCards(lessons) {
+            const container = document.getElementById('fileList');
+            if (lessons.length === 0) {
+                container.innerHTML = '<p class="status-msg">Không tìm thấy bài học nào phù hợp.</p>';
+                return;
+            }
+
+            container.innerHTML = lessons.map(file => {
+                const title = formatTitle(file.name);
+                const encodedUrl = encodeURIComponent(file.name);
+
+                return `
+                    <a href="${encodedUrl}" class="card">
+                        <div>
+                            <span class="badge">Grammar</span>
+                            <h2>${title}</h2>
+                        </div>
+                        <span class="btn-link">Vào học &rarr;</span>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        async function fetchRepoFiles() {
+            // Hiển thị ngay danh sách dự phòng để trang tải tức thì
+            allLessons = FALLBACK_FILES;
+            renderCards(allLessons);
+
+            try {
+                const apiUrl = `https://github.com{USERNAME}/${REPO}/contents/?ref=${BRANCH}&t=${Date.now()}`;
+                const response = await fetch(apiUrl);
+                
+                if (response.ok) {
+                    const files = await response.json();
+                    const fetchedLessons = files
+                        .filter(file => 
+                            file.type === 'file' && 
+                            file.name.toLowerCase().endsWith('.html') && 
+                            file.name.toLowerCase() !== 'index.html'
+                        )
+                        // Sắp xếp tự nhiên theo số (unit02 đứng trước unit10)
+                        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+                    
+                    if (fetchedLessons.length > 0) {
+                        allLessons = fetchedLessons;
+                        renderCards(allLessons);
+                    }
+                }
+            } catch (error) {
+                console.warn('Sử dụng danh sách dự phòng:', error);
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const keyword = e.target.value.toLowerCase().trim();
+            const filtered = allLessons.filter(file => {
+                const formatted = formatTitle(file.name).toLowerCase();
+                const raw = file.name.toLowerCase();
+                return formatted.includes(keyword) || raw.includes(keyword);
+            });
+            renderCards(filtered);
+        });
+
+        fetchRepoFiles();
+    </script>
 </body>
 </html>
