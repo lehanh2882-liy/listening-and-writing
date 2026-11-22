@@ -29,14 +29,14 @@
 
         .toolbar { display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .search {
-            flex: 1; min-width: 240px; padding: 0.7rem 1rem;
+            flex: 1; min-width: 240px; padding: 0.75rem 1rem;
             border: 1px solid var(--border); border-radius: 10px;
             font-size: 0.95rem; background: var(--card); outline: none;
         }
         .search:focus { border-color: var(--accent); }
         .badge {
             background: var(--card); border: 1px solid var(--border);
-            padding: 0.7rem 1rem; border-radius: 10px;
+            padding: 0.75rem 1.1rem; border-radius: 10px;
             font-size: 0.875rem; font-weight: 600; color: var(--sub);
         }
 
@@ -48,44 +48,29 @@
         .list { list-style: none; }
         .item {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0.85rem 1.2rem; border-bottom: 1px solid var(--border); gap: 1rem;
+            padding: 0.95rem 1.25rem; border-bottom: 1px solid var(--border); gap: 1rem;
         }
         .item:last-child { border-bottom: none; }
         .item:hover { background: var(--hover); }
-        .info { display: flex; align-items: center; gap: 0.7rem; min-width: 0; flex: 1; }
+        .info { display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1; }
         .name {
             font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-            font-size: 0.88rem; color: var(--text); text-decoration: none;
+            font-size: 0.9rem; color: var(--text); text-decoration: none;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .name:hover { color: var(--accent); text-decoration: underline; }
         .actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
-        .size { font-size: 0.78rem; color: var(--sub); font-family: monospace; margin-right: 0.4rem; }
         .btn {
-            padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem;
+            padding: 0.4rem 0.85rem; border-radius: 6px; font-size: 0.82rem;
             font-weight: 500; cursor: pointer; text-decoration: none;
-            border: 1px solid var(--border); background: #fff; color: var(--text);
+            border: 1px solid #bfdbfe; background: #eff6ff; color: var(--accent);
         }
         .btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-        .btn-primary { background: #eff6ff; color: var(--accent); border-color: #bfdbfe; }
+        .btn-gh {
+            border-color: var(--border); background: #fff; color: var(--text);
+        }
+        .btn-gh:hover { background: #334155; color: #fff; border-color: #334155; }
         .empty { padding: 3rem 1rem; text-align: center; color: var(--sub); }
-
-        .modal-bg {
-            position: fixed; inset: 0; background: rgba(15,23,42,0.5);
-            display: none; align-items: center; justify-content: center; padding: 1rem; z-index: 50;
-        }
-        .modal {
-            background: #fff; width: 100%; max-width: 820px; max-height: 85vh;
-            border-radius: 12px; display: flex; flex-direction: column; overflow: hidden;
-        }
-        .modal-head {
-            padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center; font-weight: 600;
-        }
-        .modal-body {
-            padding: 1.25rem; overflow: auto; background: #0f172a; color: #e2e8f0;
-            font-family: monospace; font-size: 0.85rem; white-space: pre-wrap;
-        }
     </style>
 </head>
 <body>
@@ -97,123 +82,57 @@
     </header>
 
     <div class="toolbar">
-        <input type="text" class="search" id="search" placeholder="Tìm kiếm file hoặc thư mục..." oninput="render()">
-        <div class="badge" id="count">Đang tải...</div>
+        <input type="text" class="search" id="search" placeholder="Tìm kiếm tên bài học hoặc file..." oninput="render()">
+        <div class="badge" id="count">0 tệp</div>
     </div>
 
     <div class="card">
-        <ul class="list" id="list">
-            <li class="empty">Đang tải danh sách file...</li>
-        </ul>
-    </div>
-</div>
-
-<div class="modal-bg" id="modal" onclick="this.style.display='none'">
-    <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-head">
-            <span id="m-title"></span>
-            <button class="btn" onclick="document.getElementById('modal').style.display='none'">Đóng</button>
-        </div>
-        <pre class="modal-body" id="m-body"></pre>
+        <ul class="list" id="list"></ul>
     </div>
 </div>
 
 <script>
-    const USER = 'lehanh2882-liy';
-    const REPO = 'listening-and-writing';
-    const BRANCH = 'main';
-    let files = [];
+    // Danh sách tệp trong kho lưu trữ lehanh2882-liy/listening-and-writing
+    // Khi thêm file mới lên GitHub, bạn chỉ cần thêm tên file vào danh sách dưới đây:
+    const FILES = [
+        "README.md",
+        "listening.html",
+        "writing.html"
+    ];
 
-    function formatSize(bytes) {
-        if (!bytes) return '';
-        const k = 1024, sizes = ['B', 'KB', 'MB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
-    }
-
-    // Trải phẳng cây thư mục từ jsDelivr CDN
-    function flattenJsDelivr(nodes, prefix = '') {
-        let result = [];
-        for (const node of nodes) {
-            const path = prefix ? `${prefix}/${node.name}` : node.name;
-            if (node.type === 'file') {
-                result.push({ path, size: node.size });
-            } else if (node.type === 'directory' && node.files) {
-                result = result.concat(flattenJsDelivr(node.files, path));
-            }
-        }
-        return result;
-    }
-
-    async function loadFiles() {
-        try {
-            // Nguồn 1: jsDelivr Data API (Không giới hạn lượt gọi, không bị chặn CORS)
-            const res = await fetch(`https://jsdelivr.com{USER}/${REPO}@${BRANCH}`);
-            if (res.ok) {
-                const data = await res.json();
-                files = flattenJsDelivr(data.files).filter(f => f.path !== 'index.html');
-                render();
-                return;
-            }
-        } catch (e) {}
-
-        try {
-            // Nguồn 2: GitHub API dự phòng
-            const res = await fetch(`https://github.com{USER}/${REPO}/git/trees/${BRANCH}?recursive=1`);
-            const data = await res.json();
-            files = (data.tree || [])
-                .filter(item => item.type === 'blob' && item.path !== 'index.html')
-                .map(item => ({ path: item.path, size: item.size }));
-            render();
-        } catch (err) {
-            document.getElementById('list').innerHTML = `<li class="empty">Không tải được dữ liệu: ${err.message}</li>`;
-            document.getElementById('count').textContent = 'Lỗi';
-        }
-    }
+    const USER = "lehanh2882-liy";
+    const REPO = "listening-and-writing";
 
     function render() {
         const q = document.getElementById('search').value.toLowerCase().trim();
-        const filtered = files.filter(f => f.path.toLowerCase().includes(q));
+        const filtered = FILES.filter(f => f.toLowerCase().includes(q));
         document.getElementById('count').textContent = `${filtered.length} tệp`;
 
         if (!filtered.length) {
-            document.getElementById('list').innerHTML = '<li class="empty">Không có tệp tin nào.</li>';
+            document.getElementById('list').innerHTML = '<li class="empty">Không tìm thấy tệp phù hợp.</li>';
             return;
         }
 
-        document.getElementById('list').innerHTML = filtered.map(f => {
-            const isHtml = f.path.toLowerCase().endsWith('.html');
-            const pageUrl = `./${f.path}`;
-            const rawUrl = `https://jsdelivr.net{USER}/${REPO}@${BRANCH}/${f.path}`;
+        document.getElementById('list').innerHTML = filtered.map(path => {
+            const isHtml = path.toLowerCase().endsWith('.html');
+            const pageUrl = `./${path}`;
+            const githubUrl = `https://github.com{USER}/${REPO}/blob/main/${path}`;
             return `
                 <li class="item">
                     <div class="info">
                         <span>${isHtml ? '🌐' : '📄'}</span>
-                        <a href="${isHtml ? pageUrl : rawUrl}" target="_blank" class="name" title="${f.path}">${f.path}</a>
+                        <a href="${isHtml ? pageUrl : githubUrl}" target="_blank" class="name">${path}</a>
                     </div>
                     <div class="actions">
-                        <span class="size">${formatSize(f.size)}</span>
-                        ${isHtml ? `<a href="${pageUrl}" target="_blank" class="btn btn-primary">Mở bài</a>` : ''}
-                        <button class="btn" onclick="viewCode('${f.path}')">Xem</button>
+                        ${isHtml ? `<a href="${pageUrl}" target="_blank" class="btn">Mở bài</a>` : ''}
+                        <a href="${githubUrl}" target="_blank" class="btn btn-gh">GitHub</a>
                     </div>
                 </li>
             `;
         }).join('');
     }
 
-    async function viewCode(path) {
-        document.getElementById('m-title').textContent = path;
-        document.getElementById('m-body').textContent = 'Đang tải...';
-        document.getElementById('modal').style.display = 'flex';
-        try {
-            const res = await fetch(`https://jsdelivr.net{USER}/${REPO}@${BRANCH}/${path}`);
-            document.getElementById('m-body').textContent = await res.text();
-        } catch (e) {
-            document.getElementById('m-body').textContent = 'Không đọc được nội dung tệp.';
-        }
-    }
-
-    loadFiles();
+    render();
 </script>
 </body>
 </html>
