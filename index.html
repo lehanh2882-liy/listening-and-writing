@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listening and Writing - Kho Tài Liệu</title>
-    <!-- Google Fonts: Inter & JetBrains Mono -->
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com"></script>
     <style>
         :root {
             --bg-body: #f8fafc;
@@ -18,179 +12,84 @@
             --text-primary: #0f172a;
             --text-secondary: #64748b;
             --accent: #2563eb;
-            --accent-hover: #1d4ed8;
             --border-color: #e2e8f0;
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
             --radius: 12px;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-body);
             color: var(--text-primary);
             line-height: 1.6;
             padding: 2.5rem 1rem;
         }
+        .container { max-width: 960px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 2rem; }
+        header h1 { font-size: 1.85rem; font-weight: 700; margin-bottom: 0.3rem; }
+        header p { color: var(--text-secondary); font-size: 0.95rem; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        header h1 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            letter-spacing: -0.025em;
-            color: var(--text-primary);
-            margin-bottom: 0.4rem;
-        }
-
-        header p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        /* Toolbar & Filter */
         .toolbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
             gap: 1rem;
             margin-bottom: 1.25rem;
+            flex-wrap: wrap;
         }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            min-width: 260px;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            width: 18px;
-        }
-
+        .search-box { flex: 1; min-width: 250px; }
         .search-box input {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            padding: 0.75rem 1rem;
             border: 1px solid var(--border-color);
             border-radius: 10px;
             font-size: 0.95rem;
-            font-family: inherit;
             background: var(--bg-card);
-            transition: all 0.2s;
         }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
+        .search-box input:focus { outline: none; border-color: var(--accent); }
         .stats {
             font-size: 0.875rem;
             color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 600;
             background: var(--bg-card);
-            padding: 0.6rem 1.1rem;
+            padding: 0.65rem 1.1rem;
             border-radius: 10px;
             border: 1px solid var(--border-color);
         }
 
-        /* File List Card */
         .file-card {
             background: var(--bg-card);
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             overflow: hidden;
         }
-
-        .file-list {
-            list-style: none;
-            max-height: 650px;
-            overflow-y: auto;
-        }
-
+        .file-list { list-style: none; max-height: 650px; overflow-y: auto; }
         .file-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0.9rem 1.25rem;
             border-bottom: 1px solid var(--border-color);
-            transition: background 0.15s;
             gap: 1rem;
         }
-
-        .file-item:last-child {
-            border-bottom: none;
-        }
-
-        .file-item:hover {
-            background-color: var(--bg-hover);
-        }
-
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            min-width: 0;
-            flex: 1;
-        }
-
-        .file-icon {
-            color: var(--accent);
-            flex-shrink: 0;
-        }
-
+        .file-item:last-child { border-bottom: none; }
+        .file-item:hover { background-color: var(--bg-hover); }
+        .file-info { display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1; }
         .file-path {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.88rem;
             color: var(--text-primary);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             text-decoration: none;
         }
-
-        .file-path:hover {
-            color: var(--accent);
-            text-decoration: underline;
-        }
-
-        .file-meta {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            flex-shrink: 0;
-        }
-
-        .file-size {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            font-family: 'JetBrains Mono', monospace;
-            margin-right: 0.25rem;
-        }
+        .file-path:hover { color: var(--accent); text-decoration: underline; }
+        .file-meta { display: flex; align-items: center; gap: 0.65rem; flex-shrink: 0; }
+        .file-size { font-size: 0.8rem; color: var(--text-secondary); font-family: monospace; }
 
         .btn-action {
-            background: transparent;
+            background: #fff;
             border: 1px solid var(--border-color);
             padding: 0.35rem 0.75rem;
             border-radius: 6px;
@@ -198,95 +97,41 @@
             font-weight: 500;
             color: var(--text-primary);
             cursor: pointer;
-            transition: all 0.15s;
             text-decoration: none;
         }
+        .btn-action:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .btn-open { background: #eff6ff; color: var(--accent); border-color: #bfdbfe; }
 
-        .btn-action:hover {
-            background: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
-        }
-
-        .btn-open {
-            background: #eff6ff;
-            color: var(--accent);
-            border-color: #bfdbfe;
-        }
-
-        .state-box {
-            padding: 4rem 2rem;
-            text-align: center;
-            color: var(--text-secondary);
-        }
-
+        .state-box { padding: 3.5rem 1.5rem; text-align: center; color: var(--text-secondary); }
         .error-msg {
             background: #fef2f2;
             color: #dc2626;
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
             border: 1px solid #fecaca;
             margin-bottom: 1rem;
             font-size: 0.9rem;
             display: none;
         }
 
-        /* Modal Preview */
         .modal-backdrop {
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(2px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-            z-index: 50;
+            display: none; align-items: center; justify-content: center;
+            padding: 1.5rem; z-index: 50;
         }
-
         .modal {
-            background: var(--bg-card);
-            width: 100%;
-            max-width: 850px;
-            max-height: 85vh;
-            border-radius: var(--radius);
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            background: #fff; width: 100%; max-width: 850px; max-height: 85vh;
+            border-radius: var(--radius); display: flex; flex-direction: column; overflow: hidden;
         }
-
         .modal-header {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center; font-weight: 600;
         }
-
-        .modal-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-secondary);
-            padding: 0.25rem;
-        }
-
+        .modal-close { background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-secondary); }
         .modal-body {
-            padding: 1.5rem;
-            overflow: auto;
-            background: #0f172a;
-            color: #e2e8f0;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            white-space: pre-wrap;
-            line-height: 1.5;
+            padding: 1.5rem; overflow: auto; background: #0f172a; color: #e2e8f0;
+            font-family: monospace; font-size: 0.85rem; white-space: pre-wrap;
         }
     </style>
 </head>
@@ -302,8 +147,7 @@
 
     <div class="toolbar">
         <div class="search-box">
-            <i data-lucide="search"></i>
-            <input type="text" id="searchInput" placeholder="Tìm kiếm nhanh tên bài, thư mục hoặc định dạng file..." oninput="filterFiles()">
+            <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm nhanh tên bài, thư mục hoặc định dạng file..." oninput="filterFiles()">
         </div>
         <div class="stats" id="statsBadge">Đang tải...</div>
     </div>
@@ -315,27 +159,20 @@
     </div>
 </div>
 
-<!-- Modal xem nhanh nội dung -->
 <div class="modal-backdrop" id="previewModal" onclick="closeModal()">
     <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header">
-            <span class="modal-title" id="modalTitle">filename</span>
-            <button class="modal-close" onclick="closeModal()"><i data-lucide="x"></i></button>
+            <span id="modalTitle">filename</span>
+            <button class="modal-close" onclick="closeModal()">✕</button>
         </div>
         <pre class="modal-body" id="modalContent">Đang tải nội dung...</pre>
     </div>
 </div>
 
 <script>
-    lucide.createIcons();
-
-    // Cấu hình cố định theo tài khoản GitHub của bạn
-    const CONFIG = {
-        owner: 'lehanh2882-liy',
-        repo: 'listening-and-writing',
-        branch: 'main'
-    };
-
+    const OWNER = 'lehanh2882-liy';
+    const REPO = 'listening-and-writing';
+    let activeBranch = 'main';
     let allFiles = [];
 
     function formatBytes(bytes) {
@@ -349,8 +186,66 @@
     async function fetchRepoFiles() {
         const errorBox = document.getElementById('errorBox');
         const fileList = document.getElementById('fileList');
+        const statsBadge = document.getElementById('statsBadge');
 
         try {
-            const apiUrl = `https://github.com{CONFIG.owner}/${CONFIG.repo}/git/trees/${CONFIG.branch}?recursive=1`;
-            const response = await fetch(apiUrl);
+            // Thử nhánh main trước, nếu lỗi thử tiếp nhánh master
+            let response = await fetch(`https://github.com{OWNER}/${REPO}/git/trees/main?recursive=1`);
+            if (!response.ok) {
+                activeBranch = 'master';
+                response = await fetch(`https://github.com{OWNER}/${REPO}/git/trees/master?recursive=1`);
+            }
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Lỗi 404: Không tìm thấy dữ liệu. Hãy đảm bảo kho lưu trữ "listening-and-writing" đang bật chế độ Public (Công khai) và đã có ít nhất 1 file.');
+                }
+                if (response.status === 403) {
+                    throw new Error('Lỗi 403: Đã vượt quá giới hạn lượt tải miễn phí của GitHub (60 lần/giờ). Hãy đợi vài phút rồi tải lại trang.');
+                }
+                throw new Error(`Lỗi kết nối từ GitHub (Mã lỗi: ${response.status})`);
+            }
+
+            const data = await response.json();
+            allFiles = (data.tree || []).filter(item => item.type === 'blob' && item.path !== 'index.html');
+            renderFiles(allFiles);
+        } catch (err) {
+            errorBox.textContent = err.message;
+            errorBox.style.display = 'block';
+            fileList.innerHTML = '<li class="state-box">Không thể tải danh sách tệp.</li>';
+            statsBadge.textContent = 'Lỗi tải dữ liệu';
+        }
+    }
+
+    function renderFiles(files) {
+        const fileList = document.getElementById('fileList');
+        const statsBadge = document.getElementById('statsBadge');
+        
+        statsBadge.textContent = `${files.length} tệp tin`;
+
+        if (files.length === 0) {
+            fileList.innerHTML = '<li class="state-box">Chưa có tệp tin nào khác ngoài index.html.</li>';
+            return;
+        }
+
+        fileList.innerHTML = files.map(file => {
+            const githubUrl = `https://github.com{OWNER}/${REPO}/blob/${activeBranch}/${file.path}`;
+            const pageUrl = `./${file.path}`;
+            const isHtml = file.path.toLowerCase().endsWith('.html');
+
+            return `
+                <li class="file-item">
+                    <div class="file-info">
+                        <span>${isHtml ? '🌐' : '📄'}</span>
+                        <a href="${isHtml ? pageUrl : githubUrl}" target="_blank" class="file-path" title="${file.path}">${file.path}</a>
+                    </div>
+                    <div class="file-meta">
+                        <span class="file-size">${formatBytes(file.size)}</span>
+                        ${isHtml ? `<a href="${pageUrl}" target="_blank" class="btn-action btn-open">Mở trang</a>` : ''}
+                        <button class="btn-action" onclick="previewFile('${file.path}')">Xem nội dung</button>
+                    </div>
+                </li>
+            `;
+        }).join('');
+    }
 
